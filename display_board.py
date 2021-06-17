@@ -1,5 +1,7 @@
 import pygame
-from pygame.constants import MOUSEBUTTONDOWN
+from pygame.constants import *
+from pygame.locals import *
+from pygame.draw import line
 pygame.font.init()
 
 # Colors
@@ -15,6 +17,7 @@ sqr_side = size_x/square_num
 
 # Font 
 chara = pygame.font.Font('freesansbold.ttf', 40)
+text = chara.render('1', True, line_col)
 
 pygame.init()
 
@@ -33,7 +36,6 @@ for i in range(square_num):  # i == y-coordinate
     board.append(par_list)  # append the t. list to the final list
     par_list = [] # empty the par list
 
-text = chara.render('1', True, line_col)
 
 # Draws board and makes line thicker if it's one of the two main lines
 for i in range(square_num):
@@ -48,6 +50,7 @@ for i in range(square_num):
 # main loop
 def main():
     running = True
+    pressed_key = ''
     while running:
         FPS = 60  # Frame rate
         clock = pygame.time.Clock()
@@ -59,10 +62,19 @@ def main():
                 pos = pygame.mouse.get_pos()
                 for square in board:  # here we are itering through the rows
                     for tile in square:  # here through the elements
-                        
                         if tile.collidepoint(pos):
-                            screen.blit(text, tile)
-            
+                            pygame.draw.rect(screen, line_col, tile, 5)
+
+
+            # This allows the player to type one letter max and only num from 1 to 9
+            if event.type == KEYDOWN:
+                if event.key == K_BACKSPACE:
+                    pressed_key = pressed_key[:-1]
+                elif event.key in [K_1, K_2, K_2, K_3, K_4, K_5, K_6, K_7, K_8, K_9] and len(pressed_key) == 0:
+                    pressed_key += event.unicode
+                print(pressed_key)
+
+
             # This is to quit the game and make sure it doesn't loop forever
             if event.type == pygame.QUIT:
                 running = False
