@@ -7,4 +7,10 @@ For this project was used the pygame library to display the board and pure pytho
 Hope you'll like it ;)
 
 ## How to play
-Just run the python file with pygame installed. To solve the sudoku press the space bar. To insert a number just click the tile to mark and press a number from (1 to 9). Use the backspace key to delete the number.
+Just run the python file with pygame installed. To solve the sudoku press the space bar. 
+
+To select a tile just click it with the mouse or use the arrow keys / WASD.
+
+To mark a tile just press a number from (1 to 9). 
+
+Use the backspace key to delete the number.
