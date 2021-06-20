@@ -1,111 +1,9 @@
 import pygame
+from draws import draw_tiles, draw_board
+from board import make_board, get_marked_square, deselect_all_tiles, tile, screen
+from values import *
 from pygame.constants import *
 from pygame.locals import *
-from pygame.draw import line
-pygame.font.init()
-
-# Colors
-sel_sqr_col = '#f2973d'
-line_col = '#ffffff'
-back_color = '#1d95ad'
-
-# Measurement
-size_x = 600
-size_y = 600
-square_num = 9
-sqr_side = size_x/square_num
-
-# Font 
-font = pygame.font.Font('freesansbold.ttf', 40)
-
-
-pygame.init()
-
-# This is used to display the screen
-pygame.display.set_caption('Sudoku :3')
-screen = pygame.display.set_mode((size_x, size_y))
- 
-
-# This is the class of the tiles of our 9x9 grid
-class tile:
-    def __init__(self, row, col, side, total_rows):
-        self.row = row
-        self.col = col
-        self.x = row * side
-        self.y = col * side
-        self.side = side
-        self.rect = pygame.Rect(self.x, self.y, self.side, self.side)
-        self.total_rows = total_rows
-        self.text = ''
-        self.selected = False
-        self.color = back_color
-
-    # Selects the tile
-    def select(self):
-        self.color = sel_sqr_col
-        self.selected = True
-        pygame.draw.rect(screen, sel_sqr_col, self.rect, 0)
-
-    # Deselects the tile
-    def deselect(self):
-        self.color = back_color
-        pygame.draw.rect(screen, back_color, self.rect, 0)
-        self.selected = False
-
-
-# This is to divide the squares 
-def make_board():
-    board, par_list = [], []
-    for col in range(square_num):  # i == y-coordinate
-        for row in range(square_num): # j == x-coordinate
-
-            # create a square that take the whole tile and append it to a temporary list
-            sqr = tile(row, col, size_x/9, square_num)
-            par_list.append(sqr)
-
-        board.append(par_list)  # append the t. list to the final list
-        par_list = [] # empty the par list
-    return board
-
-board = make_board()
-
-# Draws the numbers and it centers them
-def draw_tiles():
-    for col in board:
-        for tile in col:
-            text = font.render(tile.text, True, line_col, tile.color)
-            textRect = text.get_rect()
-            textRect.center = (tile.x + tile.side/2, tile.y + tile.side/2 + 5)
-            screen.blit(text, textRect)
-
-
-# Draws board and makes line thicker if it's one of the two main lines
-def draw_board():
-    for i in range(square_num):
-        line_div = size_x*i/square_num
-        if i % 3 == 0:
-            width = 5
-        else:
-            width = 1
-        pygame.draw.line(screen, line_col, (line_div, 0), (line_div, size_y), width)
-        pygame.draw.line(screen, line_col, (0, line_div), (size_x, line_div), width)
-
-
-def deselect_all_tiles():
-    for col in board:
-        for tile in col:
-            if tile.selected == True:
-                tile.deselect()
-    return board
-
-
-# We return the marked square if any
-def get_marked_square():
-    for col in board:
-        for tile in col:
-            if tile.selected == True:
-                return tile
-
 
 # main loop
 def main():
@@ -115,7 +13,6 @@ def main():
     
     running = True
     while running:
-        FPS = 60  # Frame rate
         clock = pygame.time.Clock()
         clock.tick(FPS)
 
@@ -156,7 +53,7 @@ def main():
                         
                         # MOVE DOWN
                         if event.key == K_DOWN or event.key == K_s:
-                            if last_tile.col > 7:  # if we go too right or down it will throw an index error
+                            if last_tile.col > square_num - 2:  # if we go too right or down it will throw an index error
                                 last_tile.col = -1  # so we need to resect the index to 0
                             tile = board[last_tile.col + 1][last_tile.row]
                             tile.select()
@@ -168,7 +65,7 @@ def main():
 
                         # MOVE RIGHT
                         elif event.key == K_RIGHT or event.key == K_d:
-                            if last_tile.row > 7:
+                            if last_tile.row > square_num - 2:
                                 last_tile.row = -1
                             tile = board[last_tile.col][last_tile.row + 1]
                             tile.select()
