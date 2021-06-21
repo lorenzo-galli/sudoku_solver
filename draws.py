@@ -16,7 +16,7 @@ def draw_tiles():
 def draw_board():
     for i in range(square_num):
         line_div = screen_size*i/square_num
-        if i % sqrt(square_num) == 0:
+        if i % num_root == 0:
             width = 5
         else:
             width = 1

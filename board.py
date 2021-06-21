@@ -30,6 +30,9 @@ class tile:
         pygame.draw.rect(screen, back_color, self.rect, 0)
         self.selected = False
 
+    def is_wrong(self):
+        self.color = red
+        pygame.draw.rect(screen, red, self.rect, 0)
 
 # This is to divide the squares 
 def make_board():

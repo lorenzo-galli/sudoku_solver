@@ -2,6 +2,7 @@ import pygame
 from draws import draw_tiles, draw_board
 from board import make_board, get_marked_square, deselect_all_tiles, tile, screen
 from values import *
+from check import rows_sorted, cols_sorted, bigsqr_sorted
 from pygame.constants import *
 from pygame.locals import *
 
@@ -42,6 +43,11 @@ def main():
                     # This allows the player to type one letter max and only num from 1 to 9
                     elif event.key in [K_1, K_2, K_2, K_3, K_4, K_5, K_6, K_7, K_8, K_9] and len(last_tile.text) == 0:
                         last_tile.text += event.unicode
+
+                    # This checks if rows, cols and squares are okay
+                    elif event.key == K_k:
+                        print(bigsqr_sorted())
+
 
                     # Here we check if it's a movement key
                     if event.key in [K_DOWN, K_UP, K_RIGHT, K_LEFT, K_s, K_d, K_a, K_w]: 
@@ -92,7 +98,7 @@ def main():
 
         # This is to make sure the differences are updated and displayed
         pygame.display.update()
-    
+
     pygame.quit()
     quit()
 
