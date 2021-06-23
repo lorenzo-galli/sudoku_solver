@@ -11,6 +11,7 @@ def get_values(list):
 
 # We check if the rows are okay and return a boolean 
 def rows_sorted():
+    is_okay = True
     for col in board:
 
         # we use counters for this. counters are like dictionaries
@@ -19,14 +20,16 @@ def rows_sorted():
         # if the user hasn't input anything we skip this
         if len(values) >= 1:
             if values.most_common(1)[0][1] > 1:
-                return False  # if one element is duplicate we immediately return false
-    
+                mark_red(values, col)
+                is_okay = False
+
     # if it loops through all the cols we return true
-    return True
+    return is_okay
 
 
 # like the rows the only difference is we have to take the first element of each row
 def cols_sorted():
+    is_okay = True
     for _ in range(square_num):
         to_val = []
 
@@ -34,11 +37,12 @@ def cols_sorted():
             to_val.append(col[_])
 
         # we convert it into values
-        values = Counter(get_values(to_val))
-        if len(values) >= 1:
-            if values.most_common(1)[0][1] > 1:
-                return False
-    return True
+            values = Counter(get_values(to_val))
+            if len(values) >= 1:
+                if values.most_common(1)[0][1] > 1:
+                    mark_red(values, to_val)
+                    is_okay = False
+    return is_okay
 
 # this turns the rows and cols board to a board divided by squares
 def to_checkboard(board):
@@ -94,16 +98,24 @@ def to_checkboard(board):
     squared_board.append(col9)
     return squared_board
 
+def mark_red(values, array):
+    for tile in array:
+        if tile.text == values.most_common(1)[0][0]:
+            tile.is_wrong()
+
+
 # this works like rows_sorted
 def bigsqr_sorted():
+    is_okay = True
     squared_board = to_checkboard(board)
     for square in squared_board:
         values = Counter(get_values(square))
-        print(values)
+
         if len(values) >= 1:
             if values.most_common(1)[0][1] > 1:
-                return False
-    return True
+                mark_red(values, square)
+                is_okay = False
+    return is_okay
 
 to_checkboard(board)
 

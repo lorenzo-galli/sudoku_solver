@@ -7,7 +7,7 @@ pygame.font.init()
 sel_sqr_col = '#f2973d'
 line_col = '#ffffff'
 back_color = '#1d95ad'
-red = '#ff0000'
+red = '#de4e31'
 
 # Measurement
 screen_size = 600

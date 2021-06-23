@@ -46,7 +46,11 @@ def main():
 
                     # This checks if rows, cols and squares are okay
                     elif event.key == K_k:
-                        print(bigsqr_sorted())
+                        board = deselect_all_tiles()
+                        print('Squares: ' + str(bigsqr_sorted()))
+                        print('Rows: ' + str(rows_sorted()))
+                        print('Cols: ' + str(cols_sorted()))
+
 
 
                     # Here we check if it's a movement key

@@ -60,10 +60,11 @@ def get_marked_square():
                 return tile
 
 
+
 def deselect_all_tiles():
     for col in board:
         for tile in col:
-            if tile.selected == True:
+            if tile.selected or tile.is_wrong:
                 tile.deselect()
     return board
 
