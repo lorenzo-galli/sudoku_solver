@@ -35,6 +35,11 @@ class tile:
         self.color = red
         pygame.draw.rect(screen, red, self.rect, 0)
 
+    def is_completed(self):
+        self.color = green
+        pygame.draw.rect(screen, green, self.rect, 0)
+
+
 # This is to divide the squares 
 def make_board():
     board, par_list = [], []

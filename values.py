@@ -8,6 +8,7 @@ sel_sqr_col = '#f2973d'
 line_col = '#ffffff'
 back_color = '#1d95ad'
 red = '#de4e31'
+green = '#4db541'
 
 # Measurement
 screen_size = 600

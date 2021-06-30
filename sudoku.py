@@ -47,9 +47,9 @@ def main():
                     # This checks if rows, cols and squares are okay
                     elif event.key == K_k:
                         board = deselect_all_tiles()
-                        print('Squares: ' + str(bigsqr_sorted()))
-                        print('Rows: ' + str(rows_sorted()))
-                        print('Cols: ' + str(cols_sorted()))
+                        print('Squares: ' + bigsqr_sorted())
+                        print('Rows: ' + rows_sorted())
+                        print('Cols: ' + cols_sorted())
 
 
 

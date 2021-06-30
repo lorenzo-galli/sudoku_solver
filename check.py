@@ -11,38 +11,82 @@ def get_values(list):
 
 # We check if the rows are okay and return a boolean 
 def rows_sorted():
-    is_okay = True
+    unique = True
     for col in board:
 
         # we use counters for this. counters are like dictionaries
         values = Counter(get_values(col))
 
+        # here we check if the sum is 45
+        sum = 0
+
+        # we iterate through the values adding them to the tot sum
+        for tile in values:
+                sum += int(tile)
+                
+        # if the sum == 45 we can change the tile color to green 
+        if sum == 45:
+            for tile in col:
+                tile.is_completed()
+
+        # if it's not we return false
+        else: 
+            correct_sum = False
+
         # if the user hasn't input anything we skip this
         if len(values) >= 1:
-            if values.most_common(1)[0][1] > 1:
-                mark_red(values, col)
-                is_okay = False
 
-    # if it loops through all the cols we return true
-    return is_okay
+            # we check if the most common element is repeated more than once
+            if values.most_common(1)[0][1] > 1:
+                # we mark the tile to red and we return false
+                mark_red(values, col)
+                unique = False
+                
+    # if the sum is correct and the values are unique we return completed 
+    if correct_sum == True and unique == True:
+        return 'COMPLETED'
+
+    # if the row is just unique we return No error
+    elif unique == True and correct_sum == False:
+        return 'No error'
+    
+    else: 
+        return 'ERROR'
 
 
 # like the rows the only difference is we have to take the first element of each row
 def cols_sorted():
-    is_okay = True
+    unique = True
     for _ in range(square_num):
-        to_val = []
+        col = []
 
-        for col in board:
-            to_val.append(col[_])
+        for row in board:
+            col.append(row[_])
+            values = Counter(get_values(col))
 
-        # we convert it into values
-            values = Counter(get_values(to_val))
+            sum = 0
+
+            for tile in values:
+                    sum += int(tile)
+                    
+            if sum == 45:
+                correct_sum = True
+                for tile in col:
+                    tile.is_completed()
+            else: 
+                correct_sum = False
+
             if len(values) >= 1:
                 if values.most_common(1)[0][1] > 1:
-                    mark_red(values, to_val)
-                    is_okay = False
-    return is_okay
+                    mark_red(values, col)
+                    unique = False
+         
+    if correct_sum == True and unique == True:
+        return 'COMPLETED'
+    elif unique == True and correct_sum == False:
+        return 'No error'
+    else: 
+        return 'ERROR'
 
 # this turns the rows and cols board to a board divided by squares
 def to_checkboard(board):
@@ -73,18 +117,41 @@ def mark_red(values, array):
             tile.is_wrong()
 
 
+
 # this works like rows_sorted
 def bigsqr_sorted():
-    is_okay = True
+    unique = True
+    correct_sum = True
     squared_board = to_checkboard(board)
     for square in squared_board:
         values = Counter(get_values(square))
 
+
+        sum = 0
+        for tile in values:
+                sum += int(tile)
+                
+        if sum == 45:
+            correct_sum = True
+            for tile in square:
+                tile.is_completed()
+        else: 
+            correct_sum = False
+
+    
         if len(values) >= 1:
             if values.most_common(1)[0][1] > 1:
                 mark_red(values, square)
-                is_okay = False
-    return is_okay
+                unique = False
+        
+        
+    if correct_sum == True and unique == True:
+        return 'COMPLETED'
+    elif unique == True and correct_sum == False:
+        return 'No error'
+    else: 
+        return 'ERROR'
+    
 
 to_checkboard(board)
 
