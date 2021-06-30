@@ -17,6 +17,7 @@ class tile:
         self.text = ''
         self.selected = False
         self.color = back_color
+        self.possible = []
 
     # Selects the tile
     def select(self):

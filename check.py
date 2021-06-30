@@ -46,56 +46,25 @@ def cols_sorted():
 
 # this turns the rows and cols board to a board divided by squares
 def to_checkboard(board):
-    partial = []
     squared_board = []
-    row1 = board[0:3]
-    row2 = board[3:6]
-    row3 = board[6:9]
-    col1 = []
-    col2 = []
-    col3 = []
-    col4 = []
-    col5 = []
-    col6 = []
-    col7 = []
-    col8 = []
-    col9 = []
-    for col in row1:
-        for tile in col:
-            if col.index(tile) < num_root:
-                col1.append(tile)
-            
-            elif col.index(tile) >= 3 and col.index(tile) < 6:
-                col2.append(tile)
-            elif col.index(tile) >= 6:
-                col3.append(tile)
-    squared_board.append(col1)
-    squared_board.append(col2)
-    squared_board.append(col3)
-    for col in row2:
-        for tile in col:
-            if col.index(tile) < num_root:
-                col4.append(tile)
-            
-            elif col.index(tile) >= 3 and col.index(tile) < 6:
-                col5.append(tile)
-            elif col.index(tile) >= 6:
-                col6.append(tile)
-    squared_board.append(col4)
-    squared_board.append(col5)
-    squared_board.append(col6)
-    for col in row3:
-        for tile in col:
-            if col.index(tile) < num_root:
-                col7.append(tile)
-            
-            elif col.index(tile) >= 3 and col.index(tile) < 6:
-                col8.append(tile)
-            elif col.index(tile) >= 6:
-                col9.append(tile)
-    squared_board.append(col7)
-    squared_board.append(col8)
-    squared_board.append(col9)
+    for i in range(1, num_root + 1):
+        i_prev = (i - 1) * num_root
+        row = board[i_prev:i * num_root]
+        col1 = []
+        col2 = []
+        col3 = []
+        for col in row:
+            for tile in col:
+                if col.index(tile) < num_root:
+                    col1.append(tile)
+                
+                elif col.index(tile) >= 3 and col.index(tile) < 6:
+                    col2.append(tile)
+                elif col.index(tile) >= 6:
+                    col3.append(tile)
+        squared_board.append(col1)
+        squared_board.append(col2)
+        squared_board.append(col3)
     return squared_board
 
 def mark_red(values, array):
