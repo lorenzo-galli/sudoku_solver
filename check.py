@@ -1,6 +1,6 @@
 from typing import Counter
 from board import board
-from values import square_num, num_root
+from values import square_num, num_root, right_sum
 
 # Here we imput a list with tiles and we return a list of values
 def get_values(list):
@@ -12,21 +12,22 @@ def get_values(list):
 # We check if the rows are okay and return a boolean 
 def rows_sorted():
     unique = True
-    for col in board:
+    correct_sum = True
+    for row in board:
 
         # we use counters for this. counters are like dictionaries
-        values = Counter(get_values(col))
+        values = Counter(get_values(row))
 
-        # here we check if the sum is 45
+        # here we check if the sum is correct
         sum = 0
 
         # we iterate through the values adding them to the tot sum
         for tile in values:
                 sum += int(tile)
                 
-        # if the sum == 45 we can change the tile color to green 
-        if sum == 45:
-            for tile in col:
+        # if the sum is correct we can change the tile color to green 
+        if sum == right_sum:
+            for tile in row:
                 tile.is_completed()
 
         # if it's not we return false
@@ -39,15 +40,15 @@ def rows_sorted():
             # we check if the most common element is repeated more than once
             if values.most_common(1)[0][1] > 1:
                 # we mark the tile to red and we return false
-                mark_red(values, col)
+                mark_red(values, row)
                 unique = False
                 
     # if the sum is correct and the values are unique we return completed 
-    if correct_sum == True and unique == True:
+    if correct_sum and unique:
         return 'COMPLETED'
 
     # if the row is just unique we return No error
-    elif unique == True and correct_sum == False:
+    elif unique and not correct_sum:
         return 'No error'
     
     else: 
@@ -57,33 +58,33 @@ def rows_sorted():
 # like the rows the only difference is we have to take the first element of each row
 def cols_sorted():
     unique = True
+    correct_sum = True
     for _ in range(square_num):
         col = []
 
         for row in board:
             col.append(row[_])
-            values = Counter(get_values(col))
+        values = Counter(get_values(col))
 
-            sum = 0
+        sum = 0
 
-            for tile in values:
-                    sum += int(tile)
-                    
-            if sum == 45:
-                correct_sum = True
-                for tile in col:
-                    tile.is_completed()
-            else: 
-                correct_sum = False
+        for tile in values:
+                sum += int(tile)
+                
+        if sum == right_sum:
+            for tile in col:
+                tile.is_completed()
+        else: 
+            correct_sum = False
 
-            if len(values) >= 1:
-                if values.most_common(1)[0][1] > 1:
-                    mark_red(values, col)
-                    unique = False
+        if len(values) >= 1:
+            if values.most_common(1)[0][1] > 1:
+                mark_red(values, col)
+                unique = False
          
-    if correct_sum == True and unique == True:
+    if correct_sum and unique:
         return 'COMPLETED'
-    elif unique == True and correct_sum == False:
+    elif unique and not correct_sum:
         return 'No error'
     else: 
         return 'ERROR'
@@ -131,8 +132,7 @@ def bigsqr_sorted():
         for tile in values:
                 sum += int(tile)
                 
-        if sum == 45:
-            correct_sum = True
+        if sum == right_sum:
             for tile in square:
                 tile.is_completed()
         else: 
@@ -145,9 +145,9 @@ def bigsqr_sorted():
                 unique = False
         
         
-    if correct_sum == True and unique == True:
+    if correct_sum and unique:
         return 'COMPLETED'
-    elif unique == True and correct_sum == False:
+    elif unique and not correct_sum:
         return 'No error'
     else: 
         return 'ERROR'

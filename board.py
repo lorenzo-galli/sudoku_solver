@@ -6,18 +6,18 @@ screen = pygame.display.set_mode((screen_size, screen_size))
 
 # This is the class of the tiles of our 9x9 grid
 class tile:
-    def __init__(self, row, col, side, total_rows):
+    def __init__(self, row, col, side):
         self.row = row
         self.col = col
         self.x = row * side
         self.y = col * side
         self.side = side
         self.rect = pygame.Rect(self.x, self.y, self.side, self.side)
-        self.total_rows = total_rows
         self.text = ''
         self.selected = False
         self.color = back_color
         self.possible = []
+        self.permanent = False
 
     # Selects the tile
     def select(self):
@@ -47,7 +47,7 @@ def make_board():
         for row in range(square_num): # j == x-coordinate
 
             # create a square that take the whole tile and append it to a temporary list
-            sqr = tile(row, col, screen_size/square_num, square_num)
+            sqr = tile(row, col, screen_size/square_num)
             par_list.append(sqr)
 
         board.append(par_list)  # append the t. list to the final list

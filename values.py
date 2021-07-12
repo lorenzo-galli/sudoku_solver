@@ -15,6 +15,7 @@ screen_size = 600
 square_num = 9
 num_root = int(sqrt(square_num))
 sqr_side = screen_size/square_num
+right_sum = int((square_num * (square_num+1))/2)
 
 # Font 
 font = pygame.font.Font('freesansbold.ttf', int(sqr_side*3/5))
