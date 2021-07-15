@@ -9,6 +9,7 @@ line_col = '#ffffff'
 back_color = '#1d95ad'
 red = '#de4e31'
 green = '#4db541'
+black = '#000000'
 
 # Measurement
 screen_size = 600

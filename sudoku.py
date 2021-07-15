@@ -3,6 +3,7 @@ from draws import draw_tiles, draw_board
 from board import make_board, get_marked_square, deselect_all_tiles, tile, screen
 from values import *
 from check import rows_sorted, cols_sorted, bigsqr_sorted
+from solver import update_all
 from pygame.constants import *
 from pygame.locals import *
 
@@ -30,6 +31,8 @@ def main():
                         
                         if tile.rect.collidepoint(pos):  # if mouse touches tile
                             tile.select()  # we select the tile
+                            update_all()
+                            print(tile.possible)
 
 
             # Here we take the keyboard input and tranform them into outputs
@@ -37,15 +40,16 @@ def main():
                 last_tile = get_marked_square()
                 
                 try:
-                    # We remove the entire array if the backspace is pressed
-                    if event.key == K_BACKSPACE:
-                        last_tile.text = ''
-                    # This allows the player to type one letter max and only num from 1 to 9
-                    elif event.key in [K_1, K_2, K_2, K_3, K_4, K_5, K_6, K_7, K_8, K_9] and len(last_tile.text) == 0:
-                        last_tile.text += event.unicode
+                    if not last_tile.permanent:
+                        # We remove the entire array if the backspace is pressed
+                        if event.key == K_BACKSPACE:
+                            last_tile.text = ''
+                        # This allows the player to type one letter max and only num from 1 to 9
+                        elif event.key in [K_1, K_2, K_2, K_3, K_4, K_5, K_6, K_7, K_8, K_9] and len(last_tile.text) == 0:
+                            last_tile.text += event.unicode
 
                     # This checks if rows, cols and squares are okay
-                    elif event.key == K_k:
+                    if event.key == K_k:
                         board = deselect_all_tiles()
                         print('Squares: ' + bigsqr_sorted())
                         print('Rows: ' + rows_sorted())

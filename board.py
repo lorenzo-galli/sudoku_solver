@@ -1,5 +1,24 @@
 from values import *
 
+initial_board = [
+    ['', '', '3', '', '', '', '', '', ''], 
+    ['', '', '', '', '', '', '', '7', ''], 
+    ['', '', '2', '', '', '', '', '', ''], 
+    ['', '', '', '', '', '', '', '', ''], 
+    ['', '', '', '', '1', '', '', '9', ''], 
+    ['', '', '', '', '', '', '', '', ''], 
+    ['', '', '', '', '5', '', '', '', ''], 
+    ['', '', '', '', '', '', '4', '', ''], 
+    ['', '', '', '', '', '', '', '', ''], 
+]
+
+
+
+
+
+
+
+
 # This is used to display the screen
 pygame.display.set_caption('Sudoku :3')
 screen = pygame.display.set_mode((screen_size, screen_size))
@@ -16,6 +35,7 @@ class tile:
         self.text = ''
         self.selected = False
         self.color = back_color
+        self.textColor = line_col
         self.possible = []
         self.permanent = False
 
@@ -39,6 +59,10 @@ class tile:
         self.color = green
         pygame.draw.rect(screen, green, self.rect, 0)
 
+    def is_permanent(self):
+        self.textColor = black
+        self.permanent = True
+        self.possible = [self.text]
 
 # This is to divide the squares 
 def make_board():
@@ -48,6 +72,12 @@ def make_board():
 
             # create a square that take the whole tile and append it to a temporary list
             sqr = tile(row, col, screen_size/square_num)
+            if initial_board[col][row] != "":
+                sqr.text = initial_board[col][row]
+                sqr.is_permanent()
+            if not sqr.permanent:
+                for num in range(1, square_num + 1):
+                    sqr.possible += str(num)
             par_list.append(sqr)
 
         board.append(par_list)  # append the t. list to the final list
