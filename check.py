@@ -1,5 +1,5 @@
 from typing import Counter
-from board import board
+from board import board, to_checkboard
 from values import square_num, num_root, right_sum
 
 # Here we imput a list with tiles and we return a list of values
@@ -10,7 +10,7 @@ def get_values(list):
     return values
 
 # We check if the rows are okay and return a boolean 
-def rows_sorted():
+def cols_sorted():
     unique = True
     correct_sum = True
     for row in board:
@@ -56,7 +56,7 @@ def rows_sorted():
 
 
 # like the rows the only difference is we have to take the first element of each row
-def cols_sorted():
+def rows_sorted():
     unique = True
     correct_sum = True
     for _ in range(square_num):
@@ -88,29 +88,6 @@ def cols_sorted():
         return 'No error'
     else: 
         return 'ERROR'
-
-# this turns the rows and cols board to a board divided by squares
-def to_checkboard(board):
-    squared_board = []
-    for i in range(1, num_root + 1):
-        i_prev = (i - 1) * num_root
-        row = board[i_prev:i * num_root]
-        col1 = []
-        col2 = []
-        col3 = []
-        for col in row:
-            for tile in col:
-                if col.index(tile) < num_root:
-                    col1.append(tile)
-                
-                elif col.index(tile) >= 3 and col.index(tile) < 6:
-                    col2.append(tile)
-                elif col.index(tile) >= 6:
-                    col3.append(tile)
-        squared_board.append(col1)
-        squared_board.append(col2)
-        squared_board.append(col3)
-    return squared_board
 
 def mark_red(values, array):
     for tile in array:

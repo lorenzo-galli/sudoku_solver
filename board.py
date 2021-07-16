@@ -12,7 +12,15 @@ initial_board = [
     ['', '', '', '', '', '', '', '', ''], 
 ]
 
+def swap_rows_cols(board):
+    col_grid = []
+    for _ in range(square_num):
+        col = []
 
+        for row in board:
+            col.append(row[_])
+        col_grid.append(col)
+    return col_grid
 
 
 
@@ -26,8 +34,8 @@ screen = pygame.display.set_mode((screen_size, screen_size))
 # This is the class of the tiles of our 9x9 grid
 class tile:
     def __init__(self, row, col, side):
-        self.row = row
-        self.col = col
+        self.row = col
+        self.col = row
         self.x = row * side
         self.y = col * side
         self.side = side
@@ -67,8 +75,8 @@ class tile:
 # This is to divide the squares 
 def make_board():
     board, par_list = [], []
-    for col in range(square_num):  # i == y-coordinate
-        for row in range(square_num): # j == x-coordinate
+    for row in range(square_num):  # i == y-coordinate
+        for col in range(square_num): # j == x-coordinate
 
             # create a square that take the whole tile and append it to a temporary list
             sqr = tile(row, col, screen_size/square_num)
@@ -104,3 +112,42 @@ def deselect_all_tiles():
                 tile.deselect()
     return board
 
+
+def backboard(board):
+    backboard = []
+    board = swap_rows_cols(board)
+    for row in board:
+        col = []
+        for tile in row:
+            col.append(tile.text)
+        backboard.append(col)
+    
+    for row in backboard:
+        print(row)
+
+
+# this turns the rows and cols board to a board divided by squares
+def to_checkboard(board):
+    squared_board = []
+    for i in range(1, num_root + 1):
+        i_prev = (i - 1) * num_root
+        row = board[i_prev:i * num_root]
+        col1 = []
+        col2 = []
+        col3 = []
+        for col in row:
+            for tile in col:
+                if col.index(tile) < num_root:
+                    col1.append(tile)
+                
+                elif col.index(tile) >= 3 and col.index(tile) < 6:
+                    col2.append(tile)
+                elif col.index(tile) >= 6:
+                    col3.append(tile)
+        squared_board.append(col1)
+        squared_board.append(col2)
+        squared_board.append(col3)
+    return squared_board
+
+
+col_board = swap_rows_cols(board)

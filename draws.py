@@ -1,6 +1,6 @@
-from board import screen, board
-from values import *
-from math import sqrt
+from board import screen, board, col_board
+from values import font, num_root, square_num, screen_size, line_col
+import pygame
 
 # Draws the numbers and it centers them
 def draw_tiles():

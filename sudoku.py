@@ -1,9 +1,9 @@
 import pygame
 from draws import draw_tiles, draw_board
-from board import make_board, get_marked_square, deselect_all_tiles, tile, screen
+from board import backboard, make_board, get_marked_square, col_board, deselect_all_tiles, tile, screen
 from values import *
 from check import rows_sorted, cols_sorted, bigsqr_sorted
-from solver import update_all
+from solver import update_all, update_tile
 from pygame.constants import *
 from pygame.locals import *
 
@@ -31,7 +31,8 @@ def main():
                         
                         if tile.rect.collidepoint(pos):  # if mouse touches tile
                             tile.select()  # we select the tile
-                            update_all()
+
+                            # TO REMOVE
                             print(tile.possible)
 
 
@@ -44,9 +45,12 @@ def main():
                         # We remove the entire array if the backspace is pressed
                         if event.key == K_BACKSPACE:
                             last_tile.text = ''
+
                         # This allows the player to type one letter max and only num from 1 to 9
                         elif event.key in [K_1, K_2, K_2, K_3, K_4, K_5, K_6, K_7, K_8, K_9] and len(last_tile.text) == 0:
                             last_tile.text += event.unicode
+                            update_tile(last_tile, col_board)
+
 
                     # This checks if rows, cols and squares are okay
                     if event.key == K_k:
@@ -66,26 +70,26 @@ def main():
 
                         
                         # MOVE DOWN
-                        if event.key == K_DOWN or event.key == K_s:
+                        if event.key == K_RIGHT or event.key == K_d:
                             if last_tile.col > square_num - 2:  # if we go too right or down it will throw an index error
                                 last_tile.col = -1  # so we need to resect the index to 0
                             tile = board[last_tile.col + 1][last_tile.row]
                             tile.select()
 
                         # MOVE UP
-                        elif event.key == K_UP or event.key == K_w:
+                        elif event.key == K_LEFT or event.key == K_a:
                             tile = board[last_tile.col - 1][last_tile.row]
                             tile.select()
 
                         # MOVE RIGHT
-                        elif event.key == K_RIGHT or event.key == K_d:
+                        elif event.key == K_DOWN or event.key == K_s:
                             if last_tile.row > square_num - 2:
                                 last_tile.row = -1
                             tile = board[last_tile.col][last_tile.row + 1]
                             tile.select()
 
                         # MOVE LEFT 
-                        elif event.key == K_LEFT or event.key == K_a:
+                        elif event.key == K_UP or event.key == K_w:
                             tile = board[last_tile.col][last_tile.row - 1]
                             tile.select()
                     
@@ -99,6 +103,7 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
         
+            
 
         # We need to draw our board and our tiles with numbers every frame
         draw_board()
@@ -106,6 +111,7 @@ def main():
 
         # This is to make sure the differences are updated and displayed
         pygame.display.update()
+
 
     pygame.quit()
     quit()
