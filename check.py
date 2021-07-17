@@ -1,6 +1,7 @@
 from typing import Counter
 from board import board, to_checkboard
-from values import square_num, num_root, right_sum
+from values import square_num, right_sum
+
 
 # Here we imput a list with tiles and we return a list of values
 def get_values(list):
@@ -8,6 +9,7 @@ def get_values(list):
     for tile in list:
         values += tile.text
     return values
+
 
 # We check if the rows are okay and return a boolean 
 def cols_sorted():
@@ -89,11 +91,12 @@ def rows_sorted():
     else: 
         return 'ERROR'
 
+
+# we find the wrong cells and we mark them red 
 def mark_red(values, array):
     for tile in array:
         if tile.text == values.most_common(1)[0][0]:
             tile.is_wrong()
-
 
 
 # this works like rows_sorted
@@ -129,6 +132,3 @@ def bigsqr_sorted():
     else: 
         return 'ERROR'
     
-
-to_checkboard(board)
-

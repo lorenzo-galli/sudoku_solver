@@ -1,17 +1,17 @@
 import pygame
 from draws import draw_tiles, draw_board
-from board import backboard, make_board, get_marked_square, col_board, deselect_all_tiles, tile, screen
-from values import *
+from board import make_board, get_marked_square, col_board, deselect_all_tiles, screen
+from values import back_color, FPS, square_num
 from check import rows_sorted, cols_sorted, bigsqr_sorted
 from solver import update_all, update_tile
 from pygame.constants import *
-from pygame.locals import *
 
 # main loop
 def main():
     screen.fill(back_color)
 
     board = make_board()
+    update_all(board)
     
     running = True
     while running:
@@ -34,11 +34,12 @@ def main():
 
                             # TO REMOVE
                             print(tile.possible)
+                            print(tile.sqr)
 
 
             # Here we take the keyboard input and tranform them into outputs
             if event.type == KEYDOWN:
-                last_tile = get_marked_square()
+                last_tile = get_marked_square(board)
                 
                 try:
                     if not last_tile.permanent:
@@ -65,7 +66,6 @@ def main():
                     if event.key in [K_DOWN, K_UP, K_RIGHT, K_LEFT, K_s, K_d, K_a, K_w]: 
 
                         # We get the last tile to understand where to move and we deselect it 
-                        last_tile = get_marked_square()
                         board = deselect_all_tiles()
 
                         
