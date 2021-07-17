@@ -1,13 +1,6 @@
 from values import font, num_root, square_num, screen_size, line_col
+from board import board, screen
 import pygame
-
-
-# This is used to display the screen
-pygame.display.set_caption('Sudoku :3')
-screen = pygame.display.set_mode((screen_size, screen_size))
-
-
-from board import board
 
 
 # Draws the numbers and it centers them

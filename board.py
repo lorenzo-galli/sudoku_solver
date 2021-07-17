@@ -1,10 +1,10 @@
-from values import square_num, num_root, pygame, back_color, sel_sqr_col, green, red, black, screen_size, line_col
-from draws import screen
-from puzzle_generator import initial_board
+from values import square_num, num_root, pygame, back_color, yellow, sel_sqr_col, green, red, black, screen_size, line_col
+from puzzle_generator import initial_board, ib_4x4
 
 
-
-
+# This is used to display the screen
+pygame.display.set_caption('Sudoku :3')
+screen = pygame.display.set_mode((screen_size, screen_size))
 
 
 # This is the class of the tiles of our 9x9 grid
@@ -48,6 +48,10 @@ class tile:
         self.textColor = black
         self.permanent = True
         self.possible = [self.text]
+
+    def is_solving(self):
+        self.color = yellow
+        pygame.draw.rect(screen, yellow, self.rect, 0)
 
 
 # This is to divide the squares 
@@ -124,8 +128,6 @@ def to_checkboard(board):
         for tile in row:
             squared_board[tile.sqr].append(tile)
     return squared_board
-
-
 
 board = make_board()
 col_board = swap_rows_cols(board)

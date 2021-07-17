@@ -132,3 +132,13 @@ def bigsqr_sorted():
     else: 
         return 'ERROR'
     
+
+# this is just a shortcut to run the 
+def check_all():
+    col = cols_sorted()
+    row = rows_sorted()
+    sqr = bigsqr_sorted()
+    if col == 'COMPLETED' and row == 'COMPLETED' and sqr == 'COMPLETED':
+        return True
+    else:
+        return False

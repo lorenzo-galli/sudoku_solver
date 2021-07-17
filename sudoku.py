@@ -3,7 +3,7 @@ from draws import draw_tiles, draw_board
 from board import make_board, get_marked_square, col_board, deselect_all_tiles, screen
 from values import back_color, FPS, square_num
 from check import rows_sorted, cols_sorted, bigsqr_sorted
-from solver import update_all, update_tile
+from solver import findCellWithLessCandidates, solve, update_all, update_tile
 from pygame.constants import *
 
 # main loop
@@ -34,7 +34,7 @@ def main():
 
                             # TO REMOVE
                             print(tile.possible)
-                            print(tile.sqr)
+                            findCellWithLessCandidates()
 
 
             # Here we take the keyboard input and tranform them into outputs
@@ -61,6 +61,9 @@ def main():
                         print('Cols: ' + cols_sorted())
 
 
+                    # This solves the puzzle
+                    if event.key == K_SPACE:
+                        solve()
 
                     # Here we check if it's a movement key
                     if event.key in [K_DOWN, K_UP, K_RIGHT, K_LEFT, K_s, K_d, K_a, K_w]: 
@@ -104,7 +107,6 @@ def main():
                 running = False
         
             
-
         # We need to draw our board and our tiles with numbers every frame
         draw_board()
         draw_tiles()

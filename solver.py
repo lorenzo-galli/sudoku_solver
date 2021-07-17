@@ -1,6 +1,9 @@
+from draws import draw_board, draw_tiles
 from board import swap_rows_cols, col_board, board
-from values import square_num, num_root
-from check import to_checkboard
+from values import delay
+from check import check_all, to_checkboard
+from time import sleep
+import pygame
 
 
 # Given an array it updates the possible values for each tile
@@ -37,7 +40,7 @@ def update_tile(tile, board):
 
 
 # if we cancel a value from the board we need to re-add it to the possible list
-def reAdd_tile():
+def reAdd_tile(tile):
     pass
         
 
@@ -48,12 +51,41 @@ def update_all(board):
             update_tile(tile, col_board)
 
 
+# this scans all empty cells and returns the one with less possible
 def findCellWithLessCandidates():
-    less = 1000000
     tileLess = None
-    for col in board: 
-        for tile in board:
-            if less > len(tile.possible):
-                tileLess = tile
+    for col in col_board: 
+        for tile in col:
+            if tile.text == '':
+                if tileLess == None:
+                    tileLess = tile
+                elif len(tile.possible) < len(tileLess.possible):
+                    tileLess = tile
+    try:            
+        tileLess.is_solving()
+    except AttributeError as e:
+        pass
     return tileLess
+
+
+def solve():
+    to_analyze = findCellWithLessCandidates()
+    if len(to_analyze.possible) == 0:
+        if check_all():
+            return 'Done'
+        else:
+            print('Reached the end!')
+    else:
+        to_analyze.text = to_analyze.possible[0]
+        to_analyze.possible.pop(0)
+        print('ok')
+        update_tile(to_analyze, col_board)
+
+        draw_board()
+        draw_tiles()
+        pygame.display.update()
+        sleep(delay)
+        print(solve())
+
+
 
