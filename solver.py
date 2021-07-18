@@ -1,3 +1,4 @@
+from typing import Annotated
 from draws import draw_board, draw_tiles
 from board import swap_rows_cols, col_board, board
 from values import delay
@@ -48,7 +49,7 @@ def reAdd_tile(tile):
 def update_all(board):
     for col in board:
         for tile in col:
-            update_tile(tile, col_board)
+            update_tile(tile, board)
 
 
 # this scans all empty cells and returns the one with less possible
@@ -57,35 +58,47 @@ def findCellWithLessCandidates():
     for col in col_board: 
         for tile in col:
             if tile.text == '':
-                if tileLess == None:
-                    tileLess = tile
-                elif len(tile.possible) < len(tileLess.possible):
+                if tileLess == None or len(tile.possible) < len(tileLess.possible):
                     tileLess = tile
     try:            
-        tileLess.is_solving()
+        # tileLess.is_solving()
+        pass
     except AttributeError as e:
         pass
     return tileLess
 
 
+# this is the real solving algorithm
 def solve():
+
+    # we fetch the cell with less candidates
     to_analyze = findCellWithLessCandidates()
-    if len(to_analyze.possible) == 0:
-        if check_all():
-            return 'Done'
-        else:
-            print('Reached the end!')
+
+    # if it's equal to none it means that there weren't any cell to fill
+    if to_analyze == None and check_all():
+        print('Puzzle Finished')
+
+    # if the lenght of the possibilities is equal to 0 we reached a dead point
+    elif len(to_analyze.possible) == 0:
+        print('Reached the end!') 
+        to_analyze.is_wrong()
+
+    # if none of the two previous cases we can remove the value from the possibilities 
     else:
         to_analyze.text = to_analyze.possible[0]
         to_analyze.possible.pop(0)
-        print('ok')
+
+        # we update the tile possibilities of each tile in the same row, col and sqr
         update_tile(to_analyze, col_board)
 
+        # to make the player see the algorithm in action we update the display and add a delay
         draw_board()
         draw_tiles()
         pygame.display.update()
         sleep(delay)
-        print(solve())
+
+        # this is a recursive algorithm so we re-call the function
+        solve()
 
 
 

@@ -24,4 +24,4 @@ font = pygame.font.Font('freesansbold.ttf', int(sqr_side*3/5))
 
 # Frame rate & delay
 FPS = 60  
-delay = 0.015
+delay = 0.01

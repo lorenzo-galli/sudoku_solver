@@ -11,7 +11,7 @@ def main():
     screen.fill(back_color)
 
     board = make_board()
-    update_all(board)
+    update_all(col_board)
     
     running = True
     while running:
