@@ -1,5 +1,5 @@
 from typing import Counter
-from board import board, to_checkboard
+from board import board, to_checkboard, col_board
 from values import square_num, right_sum
 
 
@@ -11,40 +11,53 @@ def get_values(list):
     return values
 
 
-# We check if the rows are okay and return a boolean 
-def cols_sorted():
+# this is a function that checks if the values are correct and if the cells are unique
+def check(values, array, green):
     unique = True
     correct_sum = True
-    for row in board:
+    # here we check if the sum is correct
+    sum = 0
+
+    # we iterate through the values adding them to the tot sum
+    for tile in values:
+            sum += int(tile)
+            
+    # if the sum is correct we can change the tile color to green
+    if sum == right_sum and green:
+        for tile in array:
+            tile.is_completed()
+
+    # if it's not we return false
+    else: 
+        correct_sum = False
+
+    # if the user hasn't input anything we skip this
+    if len(values) >= 1:
+
+        # we check if the most common element is repeated more than once
+        if values.most_common(1)[0][1] > 1:
+            # we mark the tile if the user wants to to red and we return false
+            if green:
+                mark_red(values, array)
+            unique = False
+
+    return unique, correct_sum
+
+
+# We check if the cols are okay and return a boolean 
+def cols_sorted(green=True):
+    correct_sum = True
+    unique = True
+    for col in board:
 
         # we use counters for this. counters are like dictionaries
-        values = Counter(get_values(row))
+        values = Counter(get_values(col))
+        loc_unique, loc_correct_sum = check(values, col, green)
+        if unique:
+            unique = loc_unique
+        if correct_sum:
+            correct_sum = loc_correct_sum
 
-        # here we check if the sum is correct
-        sum = 0
-
-        # we iterate through the values adding them to the tot sum
-        for tile in values:
-                sum += int(tile)
-                
-        # if the sum is correct we can change the tile color to green 
-        if sum == right_sum:
-            for tile in row:
-                tile.is_completed()
-
-        # if it's not we return false
-        else: 
-            correct_sum = False
-
-        # if the user hasn't input anything we skip this
-        if len(values) >= 1:
-
-            # we check if the most common element is repeated more than once
-            if values.most_common(1)[0][1] > 1:
-                # we mark the tile to red and we return false
-                mark_red(values, row)
-                unique = False
-                
     # if the sum is correct and the values are unique we return completed 
     if correct_sum and unique:
         return 'COMPLETED'
@@ -57,32 +70,17 @@ def cols_sorted():
         return 'ERROR'
 
 
-# like the rows the only difference is we have to take the first element of each row
-def rows_sorted():
+# like the cols the only difference is we have to take the first element of each col
+def rows_sorted(green=True):
     unique = True
     correct_sum = True
-    for _ in range(square_num):
-        col = []
-
-        for row in board:
-            col.append(row[_])
-        values = Counter(get_values(col))
-
-        sum = 0
-
-        for tile in values:
-                sum += int(tile)
-                
-        if sum == right_sum:
-            for tile in col:
-                tile.is_completed()
-        else: 
-            correct_sum = False
-
-        if len(values) >= 1:
-            if values.most_common(1)[0][1] > 1:
-                mark_red(values, col)
-                unique = False
+    for row in col_board:
+        values = Counter(get_values(row))
+        loc_unique, loc_correct_sum = check(values, row, green)
+        if unique:
+            unique = loc_unique
+        if correct_sum:
+            correct_sum = loc_correct_sum
          
     if correct_sum and unique:
         return 'COMPLETED'
@@ -99,31 +97,18 @@ def mark_red(values, array):
             tile.is_wrong()
 
 
-# this works like rows_sorted
-def bigsqr_sorted():
+# this works like cols_sorted
+def bigsqr_sorted(green=True):
     unique = True
     correct_sum = True
     squared_board = to_checkboard(board)
     for square in squared_board:
         values = Counter(get_values(square))
-
-
-        sum = 0
-        for tile in values:
-                sum += int(tile)
-                
-        if sum == right_sum:
-            for tile in square:
-                tile.is_completed()
-        else: 
-            correct_sum = False
-
-    
-        if len(values) >= 1:
-            if values.most_common(1)[0][1] > 1:
-                mark_red(values, square)
-                unique = False
-        
+        loc_unique, loc_correct_sum = check(values, square, green)
+        if unique:
+            unique = loc_unique
+        if correct_sum:
+            correct_sum = loc_correct_sum
         
     if correct_sum and unique:
         return 'COMPLETED'
@@ -133,12 +118,14 @@ def bigsqr_sorted():
         return 'ERROR'
     
 
-# this is just a shortcut to run the 
-def check_all():
-    col = cols_sorted()
-    row = rows_sorted()
-    sqr = bigsqr_sorted()
+# this is just a shortcut to run the functions
+def check_all(green=True):
+    col = cols_sorted(green)
+    row = rows_sorted(green)
+    sqr = bigsqr_sorted(green)
     if col == 'COMPLETED' and row == 'COMPLETED' and sqr == 'COMPLETED':
-        return True
+        return 'COMPLETED'
+    elif col == 'No error' and row == 'No error' and sqr == 'No error':
+        return 'No error'
     else:
-        return False
+        return 'ERROR'

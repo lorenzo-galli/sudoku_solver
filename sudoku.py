@@ -34,6 +34,7 @@ def main():
 
                             # TO REMOVE
                             print(tile.possible)
+                            print(tile.checked_values)
                             findCellWithLessCandidates()
 
 
@@ -48,13 +49,16 @@ def main():
                             last_tile.text = ''
 
                         # This allows the player to type one letter max and only num from 1 to 9
-                        elif event.key in [K_1, K_2, K_2, K_3, K_4, K_5, K_6, K_7, K_8, K_9] and len(last_tile.text) == 0:
-                            last_tile.text += event.unicode
+                        elif event.key in [K_1, K_2, K_2, K_3, K_4, K_5, K_6, K_7, K_8, K_9] and len(last_tile.text) < len(str(square_num)):
+                            if int(last_tile.text + event.unicode) <= square_num:
+                                last_tile.text += event.unicode
+                            else:
+                                last_tile.text = str(square_num)
                             update_tile(last_tile, col_board)
 
 
                     # This checks if rows, cols and squares are okay
-                    if event.key == K_k:
+                    if event.key == K_c:
                         board = deselect_all_tiles()
                         print('Squares: ' + bigsqr_sorted())
                         print('Rows: ' + rows_sorted())

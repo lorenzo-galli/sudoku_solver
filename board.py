@@ -1,5 +1,5 @@
 from values import square_num, num_root, pygame, back_color, yellow, sel_sqr_col, green, red, black, screen_size, line_col
-from puzzle_generator import initial_board, ib_4x4
+from puzzle_generator import initial_board
 
 
 # This is used to display the screen
@@ -23,6 +23,7 @@ class tile:
         self.textColor = line_col
         self.possible = []
         self.permanent = False
+        self.checked_values = []
 
     # Selects the tile
     def select(self):
@@ -49,10 +50,6 @@ class tile:
         self.permanent = True
         self.possible = [self.text]
 
-    def is_solving(self):
-        self.color = yellow
-        pygame.draw.rect(screen, yellow, self.rect, 0)
-
 
 # This is to divide the squares 
 def make_board():
@@ -67,7 +64,7 @@ def make_board():
                 sqr.is_permanent()
             if not sqr.permanent:
                 for num in range(1, square_num + 1):
-                    sqr.possible += str(num)
+                    sqr.possible.append(str(num))
             par_list.append(sqr)
 
         board.append(par_list)  # append the t. list to the final list
