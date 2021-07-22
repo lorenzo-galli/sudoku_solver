@@ -1,8 +1,10 @@
+from pygame.constants import CONTROLLER_BUTTON_DPAD_RIGHT
 from draws import draw_board, draw_tiles
 from board import swap_rows_cols, col_board
 from values import delay, square_num
-from check import check_all, to_checkboard
+from check import bigsqr_sorted, check_all, cols_sorted, rows_sorted, to_checkboard
 from time import sleep
+from timeit import timeit
 import pygame
 
 
@@ -37,15 +39,13 @@ def update_tile(tile, board):
     # same but with the squares
     squared_board = to_checkboard(board)
     update_possible(squared_board[tile.sqr], tile)
-
-
-# if we cancel a value from the board we need to re-add it to the possible list
-def reAdd_tile(tile):
-    pass
-        
+ 
 
 # this function just updates every tile
 def update_all(board):
+    for col in board:
+        for tile in col:
+            tile.fill_possibilities()
     for col in board:
         for tile in col:
             update_tile(tile, board)
@@ -63,84 +63,50 @@ def findCellWithLessCandidates():
 
 
 # this is the real solving algorithm but doesn't work
-def good_solve():
-
-    # we fetch the cell with less candidates
-    to_analyze = findCellWithLessCandidates()
-
-    # if it's equal to none it means that there weren't any cell to fill
-    if to_analyze == None and check_all():
-        print('Puzzle Finished')
-        # with open('boards.txt', 'w') as reader:
-        #     writer.write(str(board))
-
-        return True
-
-    # if the lenght of the possibilities is equal to 0 we reached a dead point
-    elif len(to_analyze.possible) == 0:
-        print('Reached the end!') 
-        to_analyze.is_wrong()
-        return False
-
-    # if none of the two previous cases we can remove the value from the possibilities 
-    else:
-        to_analyze.text = to_analyze.possible[0]
-        to_analyze.checked_values.append(to_analyze.possible[0])
-        to_analyze.possible.pop(0)
-
-        # we update the tile possibilities of each tile in the same row, col and sqr
-        update_tile(to_analyze, col_board)
-
-        # to make the player see the algorithm in action we update the display and add a delay
-        draw_board()
-        draw_tiles()
-        pygame.display.update()
-        sleep(delay)
-
-        # this is a recursive algorithm so we re-call the function
-        if not solve():
-            if len(to_analyze.possible) == 0:
-                to_analyze.possible = to_analyze.checked_values
-                return False
-            else:
-                to_analyze.text = to_analyze.possible[0]
-                to_analyze.possible.pop(0)
-                solve()
-                return True
-
-
- 
-# this is almost a brute force approach
 def solve():
 
-    # we fetch the cell with less candidates
-    to_analyze = findCellWithLessCandidates()
+    # if there is no error we run the algorithm
+    if check_all(False) == 'No error':
+        
+        # we fetch the cell with less candidates
+        to_analyze = findCellWithLessCandidates()
+        to_analyze_prev = to_analyze.possible
 
-    # if it's equal to none it means that there weren't any cell to fill
-    if to_analyze == None and check_all():
-        print('Puzzle Finished')
+        # we iterate in the possibilities and we take the first item
+        # this is because then we update the cells removing the item
+        for i in range(len(to_analyze.possible)):
+            item = to_analyze.possible[0]
+
+            # to make the player see the algorithm in action we update the display and add a delay
+            draw_board()
+            draw_tiles()
+            pygame.display.update()
+            sleep(delay)
+
+            # we assign the item to the text attribute and update the board 
+            to_analyze.text = item
+            update_all(col_board)
+
+            # if it's solvable return true else try another value
+            if solve() == True:
+                return True
+            else:
+                try:
+                    to_analyze.text = ''
+                except ValueError as e:
+                    pass
+                    
+        
+        # if we looped through the values wihtout finding anything we got 
+        # something wrong in the previous step so return false
+        to_analyze.possible = to_analyze_prev
+        return False
+
+    # if it's completed we return true
+    elif check_all(True) == 'COMPLETED':
         return True
 
-    # if the lenght of the possibilities is equal to 0 we reached a dead point
-    elif len(to_analyze.possible) == 0:
-        print('Reached the end!')
+    # if there is an error false
+    else:
+        check_all(True)
         return False
-    
-    for i in range(1, square_num + 1):
-
-        # to make the player see the algorithm in action we update the display and add a delay
-        draw_board()
-        draw_tiles()
-        pygame.display.update()
-        # sleep(delay)
-
-        to_analyze.text = str(i)
-        if check_all(False) == 'No error' or check_all(False) == 'COMPLETED':
-            if solve():
-                return True
-        else:
-            to_analyze.text = ''
-        
-    return False
-
-        

@@ -1,3 +1,4 @@
+from os import error
 from typing import Counter
 from board import board, to_checkboard, col_board
 from values import square_num, right_sum
@@ -23,9 +24,10 @@ def check(values, array, green):
             sum += int(tile)
             
     # if the sum is correct we can change the tile color to green
-    if sum == right_sum and green:
-        for tile in array:
-            tile.is_completed()
+    if sum == right_sum:
+        if green != False:
+            for tile in array:
+                tile.is_completed()
 
     # if it's not we return false
     else: 
@@ -45,7 +47,7 @@ def check(values, array, green):
 
 
 # We check if the cols are okay and return a boolean 
-def cols_sorted(green=True):
+def cols_sorted(green):
     correct_sum = True
     unique = True
     for col in board:
@@ -71,7 +73,7 @@ def cols_sorted(green=True):
 
 
 # like the cols the only difference is we have to take the first element of each col
-def rows_sorted(green=True):
+def rows_sorted(green):
     unique = True
     correct_sum = True
     for row in col_board:
@@ -98,7 +100,7 @@ def mark_red(values, array):
 
 
 # this works like cols_sorted
-def bigsqr_sorted(green=True):
+def bigsqr_sorted(green):
     unique = True
     correct_sum = True
     squared_board = to_checkboard(board)
@@ -119,13 +121,16 @@ def bigsqr_sorted(green=True):
     
 
 # this is just a shortcut to run the functions
-def check_all(green=True):
+def check_all(green):
+    cols_sorted(green)
+    rows_sorted(green)
+    bigsqr_sorted(green)
     col = cols_sorted(green)
     row = rows_sorted(green)
     sqr = bigsqr_sorted(green)
     if col == 'COMPLETED' and row == 'COMPLETED' and sqr == 'COMPLETED':
         return 'COMPLETED'
-    elif col == 'No error' and row == 'No error' and sqr == 'No error':
-        return 'No error'
-    else:
+    elif col == 'ERROR' or row == 'ERROR' or sqr == 'ERROR':
         return 'ERROR'
+    else:
+        return 'No error'

@@ -23,7 +23,6 @@ class tile:
         self.textColor = line_col
         self.possible = []
         self.permanent = False
-        self.checked_values = []
 
     # Selects the tile
     def select(self):
@@ -48,7 +47,15 @@ class tile:
     def is_permanent(self):
         self.textColor = black
         self.permanent = True
-        self.possible = [self.text]
+
+    def fill_possibilities(self):
+        if not self.permanent:
+            for num in range(1, square_num + 1):
+                try:
+                    self.possible.index(str(num))
+                except ValueError as e:
+                    self.possible.append(str(num))
+
 
 
 # This is to divide the squares 
@@ -62,9 +69,8 @@ def make_board():
             if initial_board[col][row] != "":
                 sqr.text = initial_board[col][row]
                 sqr.is_permanent()
-            if not sqr.permanent:
-                for num in range(1, square_num + 1):
-                    sqr.possible.append(str(num))
+                sqr.possible = [sqr.text]
+            sqr.fill_possibilities()
             par_list.append(sqr)
 
         board.append(par_list)  # append the t. list to the final list

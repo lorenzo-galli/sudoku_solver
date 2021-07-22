@@ -1,9 +1,11 @@
+from time import time
+from timeit import timeit
 import pygame
 from draws import draw_tiles, draw_board
 from board import make_board, get_marked_square, col_board, deselect_all_tiles, screen
 from values import back_color, FPS, square_num
 from check import rows_sorted, cols_sorted, bigsqr_sorted
-from solver import findCellWithLessCandidates, solve, update_all, update_tile
+from solver import solve, update_all
 from pygame.constants import *
 
 # main loop
@@ -21,7 +23,7 @@ def main():
         # This captures every event in pygame
         for event in pygame.event.get():
             
-            # This is how a player select the square to mark
+            # Here we check the mouse click
             if event.type == pygame.MOUSEBUTTONDOWN:
                 pos = pygame.mouse.get_pos()
                 board = deselect_all_tiles()  # if a user pressed with the mouse deselect all
@@ -32,16 +34,12 @@ def main():
                         if tile.rect.collidepoint(pos):  # if mouse touches tile
                             tile.select()  # we select the tile
 
-                            # TO REMOVE
-                            print(tile.possible)
-                            print(tile.checked_values)
-                            findCellWithLessCandidates()
-
 
             # Here we take the keyboard input and tranform them into outputs
             if event.type == KEYDOWN:
                 last_tile = get_marked_square(board)
                 
+                # here we check the key pressing
                 try:
                     if not last_tile.permanent:
                         # We remove the entire array if the backspace is pressed
@@ -54,20 +52,24 @@ def main():
                                 last_tile.text += event.unicode
                             else:
                                 last_tile.text = str(square_num)
-                            update_tile(last_tile, col_board)
 
 
                     # This checks if rows, cols and squares are okay
                     if event.key == K_c:
                         board = deselect_all_tiles()
-                        print('Squares: ' + bigsqr_sorted())
-                        print('Rows: ' + rows_sorted())
-                        print('Cols: ' + cols_sorted())
+                        print('Squares: ' + bigsqr_sorted(True))
+                        print('Rows: ' + rows_sorted(True))
+                        print('Cols: ' + cols_sorted(True))
 
 
                     # This solves the puzzle
                     if event.key == K_SPACE:
-                        solve()
+                        start = time()
+                        value = solve()
+                        end = time()
+                        if value == True:
+                            print('Puzzle solved in ' + str(end - start) + ' second')
+                        
 
                     # Here we check if it's a movement key
                     if event.key in [K_DOWN, K_UP, K_RIGHT, K_LEFT, K_s, K_d, K_a, K_w]: 

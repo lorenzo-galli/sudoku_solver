@@ -1,4 +1,5 @@
 from math import sqrt
+from puzzle_generator import initial_board
 import pygame
 
 pygame.font.init()
@@ -14,7 +15,7 @@ yellow = '#ad931d'
 
 # Measurement
 screen_size = 600
-square_num = 9
+square_num = len(initial_board)
 num_root = int(sqrt(square_num))
 sqr_side = screen_size/square_num
 right_sum = int((square_num * (square_num+1))/2)
@@ -24,4 +25,4 @@ font = pygame.font.Font('freesansbold.ttf', int(sqr_side*3/5))
 
 # Frame rate & delay
 FPS = 60  
-delay = 0.01
+delay = 0
