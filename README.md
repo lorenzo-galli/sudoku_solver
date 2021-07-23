@@ -15,10 +15,21 @@ As I've said this was done by me but I've looked up some resources to understand
 
 
 ## How to play
-Just run the python file with pygame installed. To solve the sudoku press the space bar. 
+Just run the [python file](https://github.com/lorenzo-galli/sudoku_solver/blob/main/sudoku.py) with pygame installed. 
 
-To select a tile just click it with the mouse or use the arrow keys / WASD.
+To select a tile just click it with the mouse or move the arrow keys / WASD.
 
-To mark a tile just press a number from (1 to 9). 
+To mark a tile just press an **ALLOWED** number (any other number won't be accepted). 
 
 Use the backspace key to delete the number.
+
+Press the **C** key to check your board. Any tile with an error will change its color to red. If you completed a row, column or square it will turn green.
+
+Press the **SPACE** key to make the algorithm solve the puzzle.
+
+Press **R** to restart the board and **N** to have a new puzzle.
+
+You can also change some setting in the file [values.py](https://github.com/lorenzo-galli/sudoku_solver/blob/main/values.py). You can change the number of tiles (be sure to enter a perfect square!) and the window size. 
+
+In the [boards directory](https://github.com/lorenzo-galli/sudoku_solver/tree/main/boards) there are some puzzles for the different number of tiles. If you find other valid puzzles just make a **PULL REQUEST**.
+
