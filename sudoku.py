@@ -4,7 +4,7 @@ os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 from draws import draw_tiles, draw_board
 from board import make_board, get_marked_square, col_board, deselect_all_tiles, screen
-from values import back_color, FPS, square_num
+from values import back_color, FPS, square_num, line_col
 from check import rows_sorted, cols_sorted, bigsqr_sorted
 from solver import solve, update_all
 from pygame.constants import *
@@ -45,7 +45,10 @@ def main():
                     if not last_tile.permanent:
                         # We remove the entire array if the backspace is pressed
                         if event.key == K_BACKSPACE:
+                            board = deselect_all_tiles()
+                            last_tile.select()
                             last_tile.text = ''
+
 
                         # This allows the player to type one letter max and only num from 1 to 9
                         elif event.key in [K_1, K_2, K_2, K_3, K_4, K_5, K_6, K_7, K_8, K_9] and len(last_tile.text) < len(str(square_num)):
@@ -63,8 +66,33 @@ def main():
                         print('Cols: ' + cols_sorted(True))
 
 
+                    # This restarts the puzzle
+                    if event.key == K_r:
+                        board = deselect_all_tiles()
+                        for col in col_board:
+                            for tile in col:
+                                if not tile.permanent:
+                                    tile.text = ''
+                        update_all(col_board)
+
+
+                    # This gives the user a clean board
+                    if event.key == K_e:
+                        board = deselect_all_tiles()
+                        for col in col_board:
+                            for tile in col:
+                                tile.text = ''
+                                tile.permanent = False
+                                tile.selected = False
+                                tile.color = back_color
+                                tile.textColor = line_col
+                                tile.fill_possibilities()
+                        update_all(col_board)
+
+                    
                     # This solves the puzzle
                     if event.key == K_SPACE:
+                        update_all(col_board)
                         start = time()
                         value = solve()
                         end = time()

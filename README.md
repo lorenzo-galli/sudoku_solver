@@ -1,9 +1,8 @@
 # Sudoku Solver
----
 
 This is a project I developed to practice my python skills and to test them. This is beginner level program so I know there is a lot of room for improvement and tweaks but it was just made for practice so I'll leave it like this.
 
-For this project was used the pygame library to display the board and pure python to handle the checks and algorithms. 
+For this project was used the pygame library to display the board and pure python to handle the checks and algorithms. I stored puzzles to play in json format.
 
 Hope you'll like it ;)
 
@@ -27,9 +26,9 @@ Press the **C** key to check your board. Any tile with an error will change its 
 
 Press the **SPACE** key to make the algorithm solve the puzzle.
 
-Press **R** to restart the board and **N** to have a new puzzle.
+Press **R** to restart the board, **E** to have an empty board and **N** to have a new puzzle.
 
-You can also change some setting in the file [values.py](https://github.com/lorenzo-galli/sudoku_solver/blob/main/values.py). You can change the number of tiles (be sure to enter a perfect square!) and the window size. 
+You can also change some setting in the file [values.py](https://github.com/lorenzo-galli/sudoku_solver/blob/main/values.py). 
 
 In the [boards directory](https://github.com/lorenzo-galli/sudoku_solver/tree/main/boards) there are some puzzles for the different number of tiles. If you find other valid puzzles just make a **PULL REQUEST**.
 

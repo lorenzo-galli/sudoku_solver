@@ -1,4 +1,4 @@
-from values import square_num, num_root, pygame, back_color, yellow, sel_sqr_col, green, red, black, screen_size, line_col
+from values import square_num, num_root, pygame, back_color, sel_sqr_col, green, red, black, screen_size, line_col
 from puzzle_generator import initial_board
 
 
@@ -51,9 +51,7 @@ class tile:
     def fill_possibilities(self):
         if not self.permanent:
             for num in range(1, square_num + 1):
-                try:
-                    self.possible.index(str(num))
-                except ValueError as e:
+                if str(num) not in self.possible:
                     self.possible.append(str(num))
 
 

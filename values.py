@@ -58,7 +58,6 @@ back_color = '#1d95ad'
 red = '#ad1d1d'
 green = '#33ad1d'
 black = '#000000'
-yellow = '#ad931d'
 
 
 # Measurement

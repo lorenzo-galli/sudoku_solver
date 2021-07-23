@@ -1,10 +1,8 @@
-from pygame.constants import CONTROLLER_BUTTON_DPAD_RIGHT
 from draws import draw_board, draw_tiles
 from board import swap_rows_cols, col_board
-from values import delay, square_num
-from check import bigsqr_sorted, check_all, cols_sorted, rows_sorted, to_checkboard
+from values import delay
+from check import check_all, to_checkboard
 from time import sleep
-from timeit import timeit
 import pygame
 
 
@@ -75,7 +73,10 @@ def solve():
         # we iterate in the possibilities and we take the first item
         # this is because then we update the cells removing the item
         for i in range(len(to_analyze.possible)):
-            item = to_analyze.possible[0]
+            try:
+                item = to_analyze.possible[0]
+            except IndexError as e:
+                pass
 
             # to make the player see the algorithm in action we update the display and add a delay
             draw_board()

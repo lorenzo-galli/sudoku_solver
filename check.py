@@ -1,7 +1,6 @@
-from os import error
 from typing import Counter
 from board import board, to_checkboard, col_board
-from values import square_num, right_sum
+from values import right_sum
 
 
 # Here we imput a list with tiles and we return a list of values
