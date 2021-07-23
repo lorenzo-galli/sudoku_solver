@@ -1,13 +1,15 @@
 from random import randint
+from values import square_num
 import csv
 
-boardlink = 'boards\9x9.txt'
+boardlink = f'boards/{square_num}x{square_num}.txt'
+print(boardlink)
 
-with open('boards\9x9.txt') as puzzles:
-    line_count = 0
-    for line in puzzles:
-        line_count += 1
+with open(boardlink) as puzzles:
+    print(puzzles.readlines())
 
+
+'''
 with open('boards\9x9.txt') as puzzles:
     random_num = randint(0, line_count-1)
 
@@ -21,9 +23,9 @@ with open('boards\9x9.txt') as puzzles:
                 row = row.replace("]", "")
                 row = row.split(", ")
                 initial_board0.append(row) 
-
+'''
 initial_board = []
-for col in initial_board0:
+for col in initial_board:
     row = []
     for tile in col:
         row.append(tile)

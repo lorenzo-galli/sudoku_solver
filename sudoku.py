@@ -1,5 +1,6 @@
 from time import time
-from timeit import timeit
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide"
 import pygame
 from draws import draw_tiles, draw_board
 from board import make_board, get_marked_square, col_board, deselect_all_tiles, screen
