@@ -102,8 +102,7 @@ def backboard(board):
             col.append(tile.text)
         backboard.append(col)
     
-    for row in backboard:
-        print(row)
+    return backboard
 
 
 # Normally the board is an array with other 9 arrays inside of it that represent the rows

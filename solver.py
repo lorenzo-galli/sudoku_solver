@@ -62,6 +62,7 @@ def findCellWithLessCandidates():
 
 # this is the real solving algorithm but doesn't work
 def solve():
+    solution = []
 
     # if there is no error we run the algorithm
     if check_all(False) == 'No error':
@@ -82,11 +83,10 @@ def solve():
             draw_board()
             draw_tiles()
             pygame.display.update()
-            sleep(delay)
 
             # we assign the item to the text attribute and update the board 
             to_analyze.text = item
-            update_all(col_board)
+            update_tile(to_analyze, col_board)
 
             # if it's solvable return true else try another value
             if solve() == True:
@@ -94,6 +94,7 @@ def solve():
             else:
                 try:
                     to_analyze.text = ''
+                    update_all(col_board)
                 except ValueError as e:
                     pass
                     

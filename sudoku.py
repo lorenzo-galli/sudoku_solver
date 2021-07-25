@@ -34,6 +34,9 @@ def main():
                         
                         if tile.rect.collidepoint(pos):  # if mouse touches tile
                             tile.select()  # we select the tile
+                            print('row' + str(tile.row))
+                            print('col' + str(tile.col))
+
 
 
             # Here we take the keyboard input and tranform them into outputs
