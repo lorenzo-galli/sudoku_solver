@@ -1,5 +1,5 @@
 from draws import draw_board, draw_tiles
-from board import swap_rows_cols, col_board, tile
+from board import backboard, swap_rows_cols, col_board, tile
 from values import delay
 from check import check_all, to_checkboard
 from time import sleep
@@ -61,9 +61,7 @@ def findCellWithLessCandidates():
 
 
 # this is the real solving algorithm but doesn't work
-def solve(all = False):
-    if all:
-        solution = []
+def solve(all = False, is_first = False):
 
     # if there is no error we run the algorithm
     if check_all(False) == 'No error':
@@ -72,50 +70,73 @@ def solve(all = False):
         to_analyze: tile = findCellWithLessCandidates()
         to_analyze_prev = to_analyze.possible
 
-        # we iterate in the possibilities and we take the first item
-        # this is because then we update the cells removing the item
-        for i in range(len(to_analyze.possible)):
-            try:
-                item = to_analyze.possible[0]
-            except IndexError as e:
-                pass
+        if all:
+            solution = []
+            for item in to_analyze.possible:
+                draw_board()
+                draw_tiles()
+                pygame.display.update()
 
-            # to make the player see the algorithm in action we update the display and add a delay
-            draw_board()
-            draw_tiles()
-            pygame.display.update()
+                to_analyze.text = item
+                update_tile(to_analyze, col_board)
 
-            # we assign the item to the text attribute and update the board 
-            to_analyze.text = item
-            update_tile(to_analyze, col_board)
-
-            # if it's solvable return true else try another value
-            if solve(all) == True:
-                if all:
+                if solve(all) == True:
                     return solution
                 else:
-                    return True
-            else:
-                try:
                     to_analyze.text = ''
                     update_all(col_board)
-                except ValueError as e:
-                    pass
                     
+
+        else:
+            # we iterate in the possibilities and we take the first item
+            # this is because then we update the cells removing the item
+            for i in range(len(to_analyze.possible)):
+                try:
+                    item = to_analyze.possible[0]
+                except IndexError as e:
+                    pass
+
+                # to make the player see the algorithm in action we update the display and add a delay
+                draw_board()
+                draw_tiles()
+                pygame.display.update()
+
+                # we assign the item to the text attribute and update the board 
+                to_analyze.text = item
+                update_tile(to_analyze, col_board)
+
+                # if it's solvable return true else try another value
+                if solve(False) == True:
+                    if is_first:
+                        return swap_rows_cols(col_board)
+                    else:
+                        return True
+                else:
+                    try:
+                        to_analyze.text = ''
+                        update_all(col_board)
+                    except ValueError as e:
+                        pass
+                        
         
         # if we looped through the values wihtout finding anything we got 
         # something wrong in the previous step so return false
         to_analyze.possible = to_analyze_prev
-        to_analyze.is_wrong()
-        return False
+        if is_first:
+            to_analyze.is_wrong()
+            return swap_rows_cols(col_board)
+        else:
+            return False
 
     # if it's completed we return true
-    elif check_all(True) == 'COMPLETED':
+    elif check_all(False) == 'COMPLETED':
         if all:
-            solution.append(col_board)
-        return True
+            solution = []
+            solution.append(backboard(col_board))
+            print(backboard(col_board))
+        return solution
 
     # if there is an error false
     else:
-        check_all(True)
+        check_all(False)
         return False

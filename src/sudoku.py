@@ -5,7 +5,7 @@ import pygame
 from draws import draw_tiles, draw_board
 from board import make_board, get_marked_square, col_board, deselect_all_tiles, screen
 from values import back_color, FPS, square_num, line_col
-from check import rows_sorted, cols_sorted, bigsqr_sorted
+from check import check_all, rows_sorted, cols_sorted, bigsqr_sorted
 from solver import solve, update_all
 from pygame.constants import *
 
@@ -97,10 +97,11 @@ def main():
                     if event.key == K_SPACE:
                         update_all(col_board)
                         start = time()
-                        value = solve()
+                        solved = solve(True)
                         end = time()
-                        if value == True:
-                            print('Puzzle solved in ' + str(end - start) + ' second')
+                        if check_all(False) == 'COMPLETED':
+                            print('Puzzle solved in ' + str(end - start) + ' seconds')
+                        
                         
 
                     # Here we check if it's a movement key
