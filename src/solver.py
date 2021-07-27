@@ -1,5 +1,5 @@
 from draws import draw_board, draw_tiles
-from board import swap_rows_cols, col_board
+from board import swap_rows_cols, col_board, tile
 from values import delay
 from check import check_all, to_checkboard
 from time import sleep
@@ -61,14 +61,15 @@ def findCellWithLessCandidates():
 
 
 # this is the real solving algorithm but doesn't work
-def solve():
-    solution = []
+def solve(all = False):
+    if all:
+        solution = []
 
     # if there is no error we run the algorithm
     if check_all(False) == 'No error':
         
         # we fetch the cell with less candidates
-        to_analyze = findCellWithLessCandidates()
+        to_analyze: tile = findCellWithLessCandidates()
         to_analyze_prev = to_analyze.possible
 
         # we iterate in the possibilities and we take the first item
@@ -89,8 +90,11 @@ def solve():
             update_tile(to_analyze, col_board)
 
             # if it's solvable return true else try another value
-            if solve() == True:
-                return True
+            if solve(all) == True:
+                if all:
+                    return solution
+                else:
+                    return True
             else:
                 try:
                     to_analyze.text = ''
@@ -102,10 +106,13 @@ def solve():
         # if we looped through the values wihtout finding anything we got 
         # something wrong in the previous step so return false
         to_analyze.possible = to_analyze_prev
+        to_analyze.is_wrong()
         return False
 
     # if it's completed we return true
     elif check_all(True) == 'COMPLETED':
+        if all:
+            solution.append(col_board)
         return True
 
     # if there is an error false
