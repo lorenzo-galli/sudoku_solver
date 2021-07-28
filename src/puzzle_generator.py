@@ -10,7 +10,6 @@ def read_json(file):
         return loads(puzzles.readline())
 
 
-
 def write_to_json(to_write, file):
     opening = read_json(file)
     opening.append(to_write)

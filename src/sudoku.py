@@ -99,6 +99,8 @@ def main():
                         start = time()
                         solved = solve(True)
                         end = time()
+                        if not solved:
+                            last_tile.is_wrong()
                         if check_all(False) == 'COMPLETED':
                             print('Puzzle solved in ' + str(end - start) + ' seconds')
                         
